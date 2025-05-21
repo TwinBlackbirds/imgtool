@@ -94,7 +94,7 @@ func (i *TrackedImage) getPixels() [][]color.Color {
 	if i.data == nil {
 		return nil
 	}
-	pixels := make([][]color.Color, i.data.Bounds().Dy())
+	var pixels [][]color.Color
 	size := i.data.Bounds().Size()
 	// scroll through vertically
 	for x := 0; x < size.X; x++ {
@@ -133,12 +133,6 @@ func (i *TrackedImage) flip(vertical bool) error {
 	bounds := i.data.Bounds().Max
 	for x, row := range pixels {
 		for y, pixel := range row {
-			// TODO cropping doesn't work as intended
-			// the resolution remains the same, but the image is cropped poorly.
-			// if we save it as jpeg, we can see the image has been shifted to the side
-			// png makes it transparent, so it's hard to see in the editor
-			// figure out why the image is shifted to the right (losing a portion of it)
-			// do some research or ask ai
 			if y >= bounds.Y {
 				continue
 			}
