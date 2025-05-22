@@ -174,7 +174,7 @@ func main() {
 	// save
 	filepath := "ss_1.jpg"
 	img.format = "jpeg"
-	err = img.save(&filepath) // use existing filepath
+	err = img.save(&filepath) // uses existing filepath if 'nil'
 	if err != nil {
 		log.Fatal(err)
 	}
