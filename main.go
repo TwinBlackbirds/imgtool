@@ -133,9 +133,6 @@ func (i *TrackedImage) flip(vertical bool) error {
 	bounds := i.data.Bounds().Max
 	for x, row := range pixels {
 		for y, pixel := range row {
-			if y >= bounds.Y {
-				continue
-			}
 			inverseCoordinate := bounds.Y - y - 1 // find the inverse pixel (one to swap with)
 			inverse := pixels[x][inverseCoordinate]
 			rgba.Set(x, y, inverse)               // set the original pixel to the inverse
