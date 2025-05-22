@@ -131,17 +131,20 @@ func (i *TrackedImage) flipVertically() error {
 
 	// first, get the pixel grid
 	pixels := i.getPixels()
-	//fmt.Println(pixels)
-	// and then loop through (half of them) (?), and swap them with their inverse pixel
+
+	// loop through pixels and swap them
 	bounds := i.data.Bounds().Max
 	for x, row := range pixels {
 		for y, pixel := range row {
+			// we only need to go through half of the pixels,
+			// otherwise we are unnecessarily copying over the same places twice
+			if y >= bounds.Y/2 {
+				continue
+			}
 			// find the inverse pixel (one to swap with)
 			inverseCoordinate := bounds.Y - y - 1
 			inverse := pixels[x][inverseCoordinate]
-			// TODO fix image being mirrored on both axes (should just be one)
-			// probably due to x being the same down here
-			// (or inverse having the same x value when calculated)
+			// swapping
 			rgba.Set(x, y, inverse)               // set the original pixel to the inverse
 			rgba.Set(x, inverseCoordinate, pixel) // set the inverse pixel to the original
 		}
