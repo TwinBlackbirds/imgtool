@@ -133,13 +133,17 @@ func (i *TrackedImage) flip(vertical bool) error {
 	bounds := i.data.Bounds().Max
 	for x, row := range pixels {
 		for y, pixel := range row {
-			inverseCoordinate := bounds.Y - y - 1 // find the inverse pixel (one to swap with)
+			// find the inverse pixel (one to swap with)
+			inverseCoordinate := bounds.Y - y - 1
 			inverse := pixels[x][inverseCoordinate]
+			// TODO fix image being mirrored on both axes (should just be one)
+			// probably due to x being the same down here
+			// (or inverse having the same x value when calculated)
 			rgba.Set(x, y, inverse)               // set the original pixel to the inverse
 			rgba.Set(x, inverseCoordinate, pixel) // set the inverse pixel to the original
 		}
 	}
-	i.data = rgba
+	i.data = rgba // set our image to the new, flipped image
 	return nil
 }
 
