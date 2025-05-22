@@ -84,8 +84,12 @@ func (i *TrackedImage) save(filepath *string) error {
 	return nil
 }
 
-func (i *TrackedImage) resize(modifier uint) error {
+func (i *TrackedImage) resize(modifier float64) error {
+	if modifier <= 0.1 || (modifier > 1.00 && modifier < 1.01) { // modifiers too small (0.09x - 1.01x)
+		return errors.New("unsupported image resize modifier")
+	}
 	// resize by [modifier]x
+	// whether it be 0.1x (smallest), 0.5x, 2x, 4x
 	// TODO implement
 	return nil
 }
