@@ -138,7 +138,7 @@ func (i *TrackedImage) flipVertically() error {
 		for y, pixel := range row {
 			// we only need to go through half of the pixels,
 			// otherwise we are unnecessarily copying over the same places twice
-			if y >= bounds.Y/2 {
+			if y > bounds.Y/2 {
 				continue
 			}
 			// find the inverse pixel (one to swap with)
