@@ -111,25 +111,24 @@ func (i *TrackedImage) getPixels() [][]color.Color {
 	return pixels
 }
 
-func (i *TrackedImage) flip(vertical bool) error {
-	// flips the image either vertically or horizontally
-	// if vertical is false, it flips it horiz. (obviously)
-
-	if vertical { // for now
-		// TODO implement
-		return errors.New("vertical flipping has not been implemented yet")
-	}
+func (i *TrackedImage) flipHorizontally() error {
+	// same idea as the flipVertically() algorithm, but instead of traversing via the x coordinate,
+	// we use the y coordinate and go col by col instead of row by row.
+	// flip the colors in the exact same way though.
+	// TODO implement
+	return errors.New("horizontal flipping has not been implemented yet")
+}
+func (i *TrackedImage) flipVertically() error {
+	// -- image vertical flip algorithm
 
 	// verify we have an image loaded in memory
 	if i.data == nil {
 		return errors.New("no image data, you must load the image first")
 	}
-
 	// setup our new image
 	rect := i.data.Bounds()
 	rgba := image.NewRGBA(rect)
 
-	// -- horizontal flip algorithm
 	// first, get the pixel grid
 	pixels := i.getPixels()
 	//fmt.Println(pixels)
@@ -148,6 +147,19 @@ func (i *TrackedImage) flip(vertical bool) error {
 		}
 	}
 	i.data = rgba // set our image to the new, flipped image
+	return nil
+}
+
+func (i *TrackedImage) mirror() error {
+	// flip an image both ways (rotate 180deg)
+	err := i.flipVertically()
+	if err != nil {
+		return err
+	}
+	err = i.flipHorizontally()
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -170,14 +182,13 @@ func main() {
 	fmt.Println("Resolution:", res)
 
 	// flip image
-	err = img.flip(false)
+	err = img.flipVertically()
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Flipped image successfully")
+	fmt.Println("Vertically flipped image successfully")
 	// save
-	filepath := "ss_1.jpg"
-	img.format = "jpeg"
+	filepath := "ss_1.png"
 	err = img.save(&filepath) // uses existing filepath if 'nil'
 	if err != nil {
 		log.Fatal(err)
